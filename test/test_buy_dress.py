@@ -34,11 +34,11 @@ def test_buy_summer():
     search_reslut_page = main_page.search("summer")
     cheap_dress_page = search_reslut_page.get_cheap_dress()
     buy_dress_page = cheap_dress_page.buy_the_dress()
-    # summary_page = buy_dress_page.continue_checkout()
-    # address_page = summary_page.continue_checkout()
-    # shipping_page = address_page.continue_checkout()
-    # # TODO You need to confirm the terms
-    # payment_page = shipping_page.continue_checkout()
-    # payment_confirmation_page = payment_page.pay()
-    # order_confirmation = payment_confirmation_page.confirm()
+    summary_page = buy_dress_page.continue_checkout()
+    address_page = summary_page.continue_checkout()
+    shipping_page = address_page.continue_checkout()
+    payment_page = shipping_page.continue_checkout()
+    payment_confirmation_page = payment_page.pay()
+    order_confirmation_page = payment_confirmation_page.confirm()
+    order_confirmation_page.result()
 
