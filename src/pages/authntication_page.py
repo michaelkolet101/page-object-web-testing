@@ -14,9 +14,9 @@ class Authnticatuion_page(base.Base_page):
         self._mail = ""
         self._passwrd = ""
 
-    locator = {'email': (By.ID, "email"),
-               'passwd': (By.ID, "passwd"),
-               'SubmitLogin': (By.ID, "SubmitLogin"),
+    locator = {'email': 'id=email',
+               'passwd': 'id=passwd',
+               'SubmitLogin': 'id=SubmitLogin',
                'alert-danger': (By.CLASS_NAME, 'alert-danger'),
                'lost_password': (By.CLASS_NAME, 'lost_password'),
                'link': (By.TAG_NAME, 'a')
@@ -33,11 +33,11 @@ class Authnticatuion_page(base.Base_page):
 
     def fill_mail(self):
         email_box = self.find_element(*self.locator['email'])
-        email_box.send_keys(self._mail)
+        email_box.fill(self._mail)
 
     def fill_passwd(self):
         password_box = self.find_element(*self.locator["passwd"])
-        password_box.send_keys(self._passwrd)
+        password_box.fill(self._passwrd)
 
     def click_submit(self):
         submit = self.find_element(*self.locator["SubmitLogin"])

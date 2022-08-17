@@ -9,11 +9,11 @@ class MyAccount_page(base.Base_page):
     def __init__(self, driver: webdriver):
         self._driver = driver
 
-    locator = {'home': (By.XPATH, '//*[@id="center_column"]/ul/li/a'),
+    locator = {'home': '//*[@id="center_column"]/ul/li/a',
                'info-account': (By.CLASS_NAME, 'info-account')
                }
     def home(self):
-        btn_home = self.find_element(*self.locator['home'])
+        btn_home = self.find_element(self.locator['home'])
         btn_home.click()
         return page.Main_page(self._driver)
 

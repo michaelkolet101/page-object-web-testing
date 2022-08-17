@@ -8,8 +8,8 @@ class SearchReslut_page(base.Base_page):
     def __init__(self, driver: webdriver):
         self._driver = driver
 
-    locator = {'product list': (By.CLASS_NAME, "product_list"),
-               'product': (By.CLASS_NAME, "product-container"),
+    locator = {'product list': ".product_list",
+               'product': ".product-container",
                'right-block': (By.CLASS_NAME, "right-block"),
                'price': (By.CLASS_NAME, "product-price"),
                'left-block': (By.CLASS_NAME, 'left-block')
