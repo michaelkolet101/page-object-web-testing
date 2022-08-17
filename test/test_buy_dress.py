@@ -1,12 +1,10 @@
 import src.pages.main_page as page
-
 import pytest
-import time
-import logging
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 import sys
+
+
 # my deatls
 # michael101@gmail.com
 # 12345
@@ -18,11 +16,15 @@ chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
 chrom_driver_path ='/home/michael/seleln/chromedriver'
 
+url = 'http://automationpractice.com/index.php'
+if len(sys.argv) > 1:
+    url = sys.argv[1]
+
 
 def test_set_up():
     driver = webdriver.Chrome(chrom_driver_path, chrome_options=chrome_options)
     driver.maximize_window()
-    driver.get('http://automationpractice.com/index.php')
+    driver.get(url)
     return page.Main_page(driver)
 
 

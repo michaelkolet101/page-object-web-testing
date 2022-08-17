@@ -14,5 +14,5 @@ class Summary_page(base.Base_page):
     def continue_checkout(self):
         standard_checkout_1 = self.find_element(*self.locator['checkout_btn'])
         standard_checkout_1.click()
-       
+
         return page.Address_page(self._driver)
