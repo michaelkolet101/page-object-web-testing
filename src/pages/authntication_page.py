@@ -10,15 +10,16 @@ class Authnticatuion_page(base.Base_page):
 
     def __init__(self, driver: sync_playwright):
         self._driver = driver
+        super.__init__(driver)
         self._mail = ""
         self._passwrd = ""
 
     locator = {'email': 'id=email',
                'passwd': 'id=passwd',
                'SubmitLogin': 'id=SubmitLogin',
-               'alert-danger': ('By.CLASS_NAME', 'alert-danger'),
-               'lost_password': ('By.CLASS_NAME', 'lost_password'),
-               'link': ('By.TAG_NAME', 'a')
+               'alert-danger': '.alert-danger',
+               'lost_password': '.lost_password',
+               'link': 'a'
                }
 
     def login(self, email: str, passwd: str):
@@ -41,17 +42,17 @@ class Authnticatuion_page(base.Base_page):
     def click_submit(self):
         submit = self._driver.locator(self.locator["SubmitLogin"])
         submit.click()
-    #
-    # def Authentication_msg(self, msg: str):
-    #     res = self._driver.locator(self.locator['alert-danger'])
-    #     assert msg in res.text
-    #     logging.info(res.text)
-    #     time.sleep(3)
-    #     self._driver.quit()
-    #
-    # def forgot_password(self):
-    #     lost_password = self._driver.locator(self.locator['lost_password'])
-    #     link = lost_password.locator(self.locator['link'])
-    #     link.click()
-    #     time.sleep(1)
-    #     return frgot.Forgot_password(self._driver)
+
+    def Authentication_msg(self, msg: str):
+        res = self.wait_element(self.locator['alert-danger'])
+        assert msg in res.text
+        logging.info(res.text)
+        time.sleep(3)
+        self._driver.quit()
+
+    def forgot_password(self):
+        lost_password = self.wait_element(self.locator['lost_password'])
+        link = lost_password.locator(self.locator['link'])
+        link.click()
+        time.sleep(1)
+        return frgot.Forgot_password(self._driver)
