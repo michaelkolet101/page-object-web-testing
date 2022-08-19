@@ -1,43 +1,48 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+import logging
+import time
+
+from playwright.sync_api import sync_playwright
 import src.pages.base_page as base
-import src.pages.cheap_dress_page as page
+import src.pages.cheap_dress_page as p
+
 
 class SearchReslut_page(base.Base_page):
 
-    def __init__(self, driver: webdriver):
+    def __init__(self, driver: sync_playwright):
         self._driver = driver
+        super().__init__(driver)
 
-    locator = {'product list': ".product_list",
+    locator = {
                'product': ".product-container",
-               'right-block': (By.CLASS_NAME, "right-block"),
-               'price': (By.CLASS_NAME, "product-price"),
-               'left-block': (By.CLASS_NAME, 'left-block')
+               'price': ".product-price",
+               'add_to_cart_button': '.ajax_add_to_cart_button'
                }
 
-    def find_the_min_price(self):
-        product_list = self.find_element(*self.locator['product list'])
-        product_containers = product_list.find_elements(*self.locator['product'])
-        list_price = []
-        minimum_price = 0
-        for product_container in product_containers:
-            right_block = product_container.find_element(*self.locator['right-block'])
-            price = right_block.find_element(*self.locator['price']).text
-            list_price.append((price[1::]))
-            minimum_price = min(list_price)
-        return minimum_price
+    def finding_relevant(self) -> dict:
+        """
+        finding relevant products - and make a Dict[price:product]
+        :param open_page:
+        :return: dict of products
+        """
+        product_list = self._driver.query_selector_all(self.locator['product'])
+        price_list = {}
+        for product in product_list:
+            price = product.query_selector(self.locator['price']).text_content().strip()
+            logging.info(price)
+            # Dict[price:product]
+            price_list[price] = product
+
+        return price_list
 
     def get_cheap_dress(self):
-        minimum_price = self.find_the_min_price()
-        product_list = self.find_element(*self.locator['product list'])
-        product_containers = product_list.find_elements(*self.locator['product'])
-        for product_container in product_containers:
-            right_block = product_container.find_element(*self.locator['right-block'])
-            price = right_block.find_element(*self.locator['price']).text
-            p = float(price[1::])
-            if (p == float(minimum_price)):
-                left_block = product_container.find_element(*self.locator['left-block'])
-                left_block.click()
-                break
+        price_list = self.finding_relevant()
+        logging.info(price_list)
+        # finding cheap dress
+        cheapes = min(price_list.keys())
+        price_list[cheapes].click()
 
-        return page.Cheap_dress_page(self._driver)
+        # add to cart
+        price_list[cheapes].query_selector(self.locator['add_to_cart_button']).click()
+        self._driver.wait_for_timeout(2)
+
+        return p.Cheap_dress_page(self._driver)

@@ -8,6 +8,7 @@ class Forgot_password(base.Base_page):
 
     def __init__(self, driver: webdriver):
         self._driver = driver
+        super().__init__(driver)
 
     locator = {'page_subheading': (By.TAG_NAME, 'h1'),
                'email_box': (By.ID, 'email'),

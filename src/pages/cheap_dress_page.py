@@ -1,5 +1,4 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from playwright.sync_api import sync_playwright
 import src.pages.base_page as base
 import src.pages.buy_dress_page as page
 import time
@@ -7,18 +6,15 @@ import time
 
 class Cheap_dress_page(base.Base_page):
 
-    def __init__(self, driver: webdriver):
+    def __init__(self, driver: sync_playwright):
         self._driver = driver
+        super().__init__(driver)
 
-    locator = {'columns-container': (By.CLASS_NAME, 'columns-container'),
-               'buy_block': (By.ID, 'buy_block'),
-               'Submit': (By.NAME, 'Submit')
-               }
+    locator = {'checkout': 'text=Proceed to checkout'}
 
     def buy_the_dress(self):
-        columns_container = self.find_element(*self.locator['columns-container'])
-        buy_block = columns_container.find_element(*self.locator['buy_block'])
-        submit = buy_block.find_element(*self.locator['Submit'])
+        submit = self.find_element(self.locator['checkout'])
         submit.click()
-        time.sleep(5)
+        time.sleep(3)
+
         return page.Buy_dress_page(self._driver)

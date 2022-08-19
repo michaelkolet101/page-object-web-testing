@@ -1,21 +1,22 @@
 import src.pages.base_page as base
 import src.pages.payment_confirmation_page as page
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+from playwright.sync_api import sync_playwright
+
 import time
 
 
 class Payment_page(base.Base_page):
-    def __init__(self, driver: webdriver):
+    def __init__(self, driver: sync_playwright):
         self._driver = driver
+        super().__init__(driver)
 
-    locator = {'payment_module': (By.CLASS_NAME, 'payment_module'),
-               'bankwire': (By.CLASS_NAME, 'bankwire')
+    locator = {'payment_module': '.payment_module',
+               'bankwire': '.bankwire'
                }
 
     def pay(self):
-        pay = self.find_element(*self.locator['payment_module'])
-        bankwire = pay.find_element(*self.locator['bankwire'])
+        pay = self.wait_element(self.locator['payment_module'])
+        bankwire = pay.wait_for_selector(self.locator['bankwire'])
         bankwire.click()
         return page.Payment_confirmation(self._driver)
 

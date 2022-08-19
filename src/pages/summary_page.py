@@ -1,18 +1,19 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+import time
+
+from playwright.sync_api import sync_playwright
 import src.pages.base_page as base
 import src.pages.address_page as page
 
 
 class Summary_page(base.Base_page):
 
-    def __init__(self, driver: webdriver):
+    def __init__(self, driver: sync_playwright):
         self._driver = driver
+        super().__init__(driver)
 
-    locator = {'checkout_btn': (By.CLASS_NAME, 'standard-checkout')}
-
+    locator = {'checkout_btn': '//*[@id="center_column"]/form/p/button'}
     def continue_checkout(self):
-        standard_checkout_1 = self.find_element(*self.locator['checkout_btn'])
-        standard_checkout_1.click()
+        self._driver.locator(self.locator['checkout_btn']).click()
+        time.sleep(3)
 
         return page.Address_page(self._driver)
